@@ -1,5 +1,3 @@
-from leitor_csv import load_csv_busca
-
-X,Y = load_csv_busca()
-
-print(X)
+import pandas as pd
+df = pd.read_csv("busca_cursos.csv")
+print(df)
