@@ -1,7 +1,7 @@
-from leitor_csv import load_csv
+from leitor_csv import load_csv_acesso
 from sklearn.naive_bayes import MultinomialNB
 
-X, Y = load_csv()
+X, Y = load_csv_acesso()
 
 treino_dados = X[:90]
 treino_marcacoes = Y[:90]

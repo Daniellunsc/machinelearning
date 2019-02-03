@@ -1,7 +1,7 @@
 import csv
 
 
-def load_csv():
+def load_csv_acesso():
     dados = []
     marcacoes = []
 
@@ -13,3 +13,18 @@ def load_csv():
         marcacoes.append(int(comprou))
 
     return dados, marcacoes
+
+
+def load_csv_busca():
+    X = []
+    Y = []
+
+    arquivo = open("busca_cursos.csv", "rt")
+    leitor = csv.reader(arquivo)
+    next(leitor)
+    for home, busca, logado, comprou in leitor:
+        dado = [int(home), busca, int(logado)]
+        X.append(dado)
+        Y.append(int(comprou))
+
+    return X, Y
