@@ -1,45 +1,44 @@
+from collections import Counter
 import pandas as pd
-from sklearn.naive_bayes import MultinomialNB
 
-df = pd.read_csv("busca_cursos.csv")
+df = pd.read_csv('busca_cursos2.csv')
+
 X_df = df[['home', 'busca', 'logado']]
 Y_df = df['comprou']
-X_dummies_df = pd.get_dummies(X_df)
-Y_dummies_df = Y_df
 
-## eficacia
+Xdummies_df = pd.get_dummies(X_df)
+Ydummies_df = Y_df
 
+X = Xdummies_df.values
+Y = Ydummies_df.values
 
+porcentagem_treino = 0.9
 
-X = X_dummies_df.values
-Y = Y_dummies_df.values
+tamanho_de_treino = int(porcentagem_treino * len(Y))
+tamanho_de_teste = len(Y) - tamanho_de_treino
 
-acertos_de_um = len(Y[Y==1])
-acerto_de_zero = len(Y[Y==0])
-
-taxa_de_acerto_base = max(acertos_de_um, acerto_de_zero) / len(Y) * 100.0
-
-print("Taxa de acerto base: {} %".format(taxa_de_acerto_base))
-
-tamanho_de_treino = 0.9 * len(Y)
-tamanho_de_teste = int(len(Y) - tamanho_de_treino)
-
-treino_dados = X[:int(tamanho_de_treino)]
-treino_marcacoes = Y[:int(tamanho_de_treino)]
+treino_dados = X[:tamanho_de_treino]
+treino_marcacoes = Y[:tamanho_de_treino]
 
 teste_dados = X[-tamanho_de_teste:]
 teste_marcacoes = Y[-tamanho_de_teste:]
 
-model = MultinomialNB()
-model.fit(treino_dados, treino_marcacoes)
+from sklearn.naive_bayes import MultinomialNB
 
-resultados = model.predict(teste_dados)
-diferencas = resultados - teste_marcacoes
-acertos = [d for d in diferencas if d == 0]
-total_acertos = len(acertos)
-total_elemento = len(teste_dados)
+modelo = MultinomialNB()
+modelo.fit(treino_dados, treino_marcacoes)
 
-taxa_acerto = 100.0 * total_acertos / total_elemento
+resultado = modelo.predict(teste_dados)
+acertos = (resultado == teste_marcacoes)
 
-print("Taxa de acerto do algoritmo: {} %".format(taxa_acerto))
+total_de_acertos = sum(acertos)
+total_de_elementos = len(teste_dados)
+taxa_de_acerto = 100.0 * total_de_acertos / total_de_elementos
 
+print("Taxa de acerto do algoritmo: %f" % taxa_de_acerto)
+print(total_de_elementos)
+
+# a eficácia do algoritmo que chuta tudo um único valor
+acerto_base = max(Counter(teste_marcacoes).values())
+taxa_de_acerto_base = 100.0 * acerto_base / len(teste_marcacoes)
+print("Taxa de acerto base: %f" % taxa_de_acerto_base)
