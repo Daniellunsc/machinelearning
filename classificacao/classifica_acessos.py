@@ -1,4 +1,4 @@
-from dados import carregar_acessos
+from classificacao.dados import carregar_acessos
 
 X, Y = carregar_acessos()
 
